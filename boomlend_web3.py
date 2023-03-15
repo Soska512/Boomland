@@ -17,20 +17,20 @@ def boomland(seed1):
     seed = rows_list[i]
     try:
         account = web3.eth.account.from_mnemonic(seed)
-        private_key = web3.toHex(account.privateKey)
+        private_key = web3.to_hex(account._private_key)
         address = account.address
-        checksum_address = Web3.toChecksumAddress(address)
+        checksum_address = Web3.to_checksum_address(address)
         dict_transaction = {
             'chainId': web3.eth.chain_id,
             'from': address,
             'gasPrice': web3.eth.gas_price,
-            'nonce': web3.eth.getTransactionCount(address),
+            'nonce': web3.eth.get_transaction_count(address),
             'gas': 210_000
         }
         contractXDXD = web3.eth.contract(contract_address, abi=ABI)
-        transaction = contractXDXD.functions.requestTokens().buildTransaction(dict_transaction)
+        transaction = contractXDXD.functions.requestTokens().build_transaction(dict_transaction)
         signed_txn = web3.eth.account.sign_transaction(transaction, private_key)
-        txn_hash = web3.eth.sendRawTransaction(signed_txn.rawTransaction)
+        txn_hash = web3.eth.send_raw_transaction(signed_txn.rawTransaction)
         print(f'Token request: {txn_hash.hex()}')
     except ValueError:
         continue
